@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Fonts are loaded via <link> in the layout (not next/font) so builds never
+     need network access; these are the family names with graceful fallbacks. */
+  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* warm editorial "paper" light theme — values are R G B for rgb(var() / a) */
+  --paper: 250 249 246;
+  --paper-subtle: 243 241 235;
+  --ink: 24 23 21;
+  --ink-muted: 92 88 82;
+  --ink-faint: 140 135 128;
+  --line: 224 219 209;
+  --accent: 178 34 34;
+  --accent-soft: 246 226 222;
+}
+
+.dark {
+  --paper: 19 18 20;
+  --paper-subtle: 28 27 30;
+  --ink: 237 235 230;
+  --ink-muted: 169 165 158;
+  --ink-faint: 120 116 110;
+  --line: 49 47 52;
+  --accent: 248 113 113;
+  --accent-soft: 58 33 33;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: rgb(var(--paper));
+  color: rgb(var(--ink));
+  font-feature-settings: 'kern', 'liga';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(var(--accent) / 0.18);
+}
+
+/* Skeleton shimmer for loading cards */
+@keyframes shimmer {
+  0% { background-position: -480px 0; }
+  100% { background-position: 480px 0; }
+}
+
+.skeleton {
+  background-image: linear-gradient(
+    90deg,
+    rgb(var(--paper-subtle)) 0%,
+    rgb(var(--line) / 0.55) 50%,
+    rgb(var(--paper-subtle)) 100%
+  );
+  background-size: 480px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+/* Thin, theme-aware scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line)) transparent;
+}
