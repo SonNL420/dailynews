@@ -1,35 +1,51 @@
 'use client';
 
 import { countryName, flagEmoji } from '@/lib/countries';
-import { allLabel } from '@/lib/categories';
 import type { CountryCode, LanguageCode } from '@/lib/types';
 
 interface CountryFilterProps {
   language: LanguageCode;
+  /** All countries available for the active language (regardless of enabled state). */
   countries: CountryCode[];
-  active: CountryCode | 'all';
-  onChange: (country: CountryCode | 'all') => void;
+  isEnabled: (country: CountryCode) => boolean;
+  onToggle: (country: CountryCode) => void;
+  onSetAll: (enabled: boolean) => void;
 }
 
 /**
- * Narrows within the active language by country. Only rendered when the active
- * language spans more than one country (e.g. fr → FR/BE/CH/CA).
+ * Lets the user pick which countries show up on the front page for the active
+ * language (e.g. fr → FR/BE/CH/CA). Multi-select: any combination can be on,
+ * defaulting to all. Only rendered when the language spans more than one country.
  */
-export function CountryFilter({ language, countries, active, onChange }: CountryFilterProps) {
+export function CountryFilter({
+  language,
+  countries,
+  isEnabled,
+  onToggle,
+  onSetAll,
+}: CountryFilterProps) {
   if (countries.length < 2) return null;
 
+  const allOn = countries.every((c) => isEnabled(c));
+
   return (
-    <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Country">
-      <Chip label={allLabel(language)} isActive={active === 'all'} onClick={() => onChange('all')} />
+    <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Countries">
       {countries.map((country) => (
         <Chip
           key={country}
           label={countryName(country)}
           flag={flagEmoji(country)}
-          isActive={active === country}
-          onClick={() => onChange(country)}
+          isActive={isEnabled(country)}
+          onClick={() => onToggle(country)}
         />
       ))}
+      <button
+        type="button"
+        onClick={() => onSetAll(!allOn)}
+        className="ml-1 whitespace-nowrap text-xs font-medium text-ink-faint underline decoration-dotted underline-offset-2 hover:text-ink"
+      >
+        {allOn ? 'Deselect all' : 'Select all'}
+      </button>
     </div>
   );
 }
@@ -50,14 +66,19 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={isActive}
+      title={isActive ? `Hide ${label}` : `Show ${label}`}
       className={[
         'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition',
         isActive
           ? 'border-accent bg-accent-soft text-ink'
-          : 'border-line text-ink-muted hover:border-ink-faint hover:text-ink',
+          : 'border-line text-ink-faint line-through decoration-1 hover:border-ink-faint hover:text-ink-muted',
       ].join(' ')}
     >
-      {flag && <span aria-hidden>{flag}</span>}
+      {flag && (
+        <span aria-hidden className={isActive ? '' : 'opacity-40 grayscale'}>
+          {flag}
+        </span>
+      )}
       {label}
     </button>
   );

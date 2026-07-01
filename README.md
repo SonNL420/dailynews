@@ -16,10 +16,16 @@ narrow by country and category.
 - **Language-first.** Exactly one language is active at a time, and only that
   language's articles are shown. Every source is tagged with both a **language**
   and a **country**, because the two aren't 1:1 (fr → FR/BE/CH/CA; BE → nl + fr).
-- **Country & category filters** that narrow within the active language.
-- **Curated seed of ~90 feeds** across Czech, Dutch, French, English, German,
-  Spanish, Italian, Portuguese and Vietnamese outlets — plus the ability to
-  **paste any custom RSS URL** to extend it.
+- **Country picker.** Multi-select which countries appear on the front page for
+  the active language (e.g. read French news from France and Canada but skip
+  Belgium and Switzerland) — defaults to all on, toggle any combination off,
+  persisted per language.
+- **Category tabs** that further narrow within the active language/countries.
+- **Curated seed of 175+ feeds across 25 countries** spanning Czech, Dutch,
+  French, English, German, Spanish, Italian, Portuguese and Vietnamese outlets
+  (e.g. English also covers the US, Ireland, Australia, New Zealand, India,
+  Canada and South Africa; Spanish also covers Mexico, Argentina, Colombia and
+  Chile) — plus the ability to **paste any custom RSS URL** to extend it.
 - **Cards** show headline, summary, image, source, country flag and a localized
   relative timestamp ("2 h ago" in the reading language), linking out to the
   original article.

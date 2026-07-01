@@ -16,12 +16,14 @@ export default function Home() {
     prefs,
     hydrated,
     setLanguage,
-    setCountry,
     setCategory,
     toggleTheme,
     isSourceEnabled,
     toggleSource,
     setSourcesEnabled,
+    isCountryEnabled,
+    toggleCountry,
+    setCountriesEnabled,
     addCustomSource,
     removeCustomSource,
   } = usePreferences();
@@ -39,9 +41,14 @@ export default function Home() {
     [builtinSources, customForLang],
   );
 
+  // A source counts toward the front page only if it's individually enabled
+  // AND its country hasn't been switched off.
   const enabledIds = useMemo(
-    () => langSources.filter((s) => isSourceEnabled(s.id)).map((s) => s.id),
-    [langSources, isSourceEnabled],
+    () =>
+      langSources
+        .filter((s) => isSourceEnabled(s.id) && isCountryEnabled(language, s.country))
+        .map((s) => s.id),
+    [langSources, isSourceEnabled, isCountryEnabled, language],
   );
 
   const { articles, errors, loading, error, lastUpdated, refresh } = useArticles({
@@ -51,19 +58,21 @@ export default function Home() {
     enabled: hydrated,
   });
 
-  // Country / category options derive from the enabled sources, so the filters
-  // stay stable and don't flicker as articles stream in.
-  const availableCountries = useMemo(() => {
+  // All countries the active language spans (regardless of enabled state), so
+  // a country the user turned off stays visible in the picker to turn back on.
+  const allCountries = useMemo(() => {
     const set = new Set<CountryCode>();
-    for (const s of langSources) if (isSourceEnabled(s.id)) set.add(s.country);
+    for (const s of langSources) set.add(s.country);
     return Array.from(set).sort();
-  }, [langSources, isSourceEnabled]);
+  }, [langSources]);
 
   const availableCategories = useMemo(() => {
     const set = new Set<Category>();
-    for (const s of langSources) if (isSourceEnabled(s.id)) set.add(s.category);
+    for (const s of langSources) {
+      if (isSourceEnabled(s.id) && isCountryEnabled(language, s.country)) set.add(s.category);
+    }
     return Array.from(set);
-  }, [langSources, isSourceEnabled]);
+  }, [langSources, isSourceEnabled, isCountryEnabled, language]);
 
   // If a filter no longer applies after switching language, fall back to "all".
   useEffect(() => {
@@ -77,11 +86,10 @@ export default function Home() {
     () =>
       articles.filter((a) => {
         if (a.language !== language) return false; // one language at a time
-        if (prefs.country !== 'all' && a.country !== prefs.country) return false;
         if (prefs.category !== 'all' && a.category !== prefs.category) return false;
         return true;
       }),
-    [articles, language, prefs.country, prefs.category],
+    [articles, language, prefs.category],
   );
 
   return (
@@ -106,9 +114,10 @@ export default function Home() {
           />
           <CountryFilter
             language={language}
-            countries={availableCountries}
-            active={prefs.country}
-            onChange={setCountry}
+            countries={allCountries}
+            isEnabled={(country) => isCountryEnabled(language, country)}
+            onToggle={(country) => toggleCountry(language, country)}
+            onSetAll={(enabled) => setCountriesEnabled(language, allCountries, enabled)}
           />
         </div>
 
@@ -132,8 +141,8 @@ export default function Home() {
           error={error}
           emptyHint={
             enabledIds.length === 0
-              ? 'No sources enabled for this language. Open Sources to turn some on or add your own RSS feed.'
-              : 'Try another category or country, or add more sources.'
+              ? 'Nothing selected for this language — turn a country back on above, or open Sources to enable outlets or add your own RSS feed.'
+              : 'Try another category, select more countries above, or add more sources.'
           }
         />
       </main>

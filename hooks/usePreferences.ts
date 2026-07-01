@@ -8,10 +8,15 @@ export type ThemeMode = 'light' | 'dark';
 
 export interface Preferences {
   language: LanguageCode;
-  country: CountryCode | 'all';
   category: Category | 'all';
   /** Built-in/custom source ids the user has switched OFF (default: all on). */
   disabledSourceIds: string[];
+  /**
+   * Countries switched OFF for the front page, keyed as `${language}:${country}`
+   * (default: all on). Scoped per-language so turning off e.g. Belgium while
+   * reading French doesn't also hide it while reading Dutch.
+   */
+  disabledCountries: string[];
   customSources: Source[];
   theme: ThemeMode;
 }
@@ -20,12 +25,16 @@ const STORAGE_KEY = 'dailynews:prefs:v1';
 
 const DEFAULT_PREFS: Preferences = {
   language: DEFAULT_LANGUAGE,
-  country: 'all',
   category: 'all',
   disabledSourceIds: [],
+  disabledCountries: [],
   customSources: [],
   theme: 'light',
 };
+
+function countryKey(language: LanguageCode, country: CountryCode): string {
+  return `${language}:${country}`;
+}
 
 function loadPrefs(): Preferences {
   if (typeof window === 'undefined') return DEFAULT_PREFS;
@@ -46,6 +55,9 @@ function loadPrefs(): Preferences {
           : DEFAULT_PREFS.language,
       disabledSourceIds: Array.isArray(parsed.disabledSourceIds)
         ? parsed.disabledSourceIds
+        : [],
+      disabledCountries: Array.isArray(parsed.disabledCountries)
+        ? parsed.disabledCountries
         : [],
       customSources: Array.isArray(parsed.customSources) ? parsed.customSources : [],
     };
@@ -81,12 +93,7 @@ export function usePreferences() {
   }, [prefs.theme, hydrated]);
 
   const setLanguage = useCallback((language: LanguageCode) => {
-    // Country options are language-specific, so reset the country filter.
-    setPrefs((p) => ({ ...p, language, country: 'all' }));
-  }, []);
-
-  const setCountry = useCallback((country: CountryCode | 'all') => {
-    setPrefs((p) => ({ ...p, country }));
+    setPrefs((p) => ({ ...p, language }));
   }, []);
 
   const setCategory = useCallback((category: Category | 'all') => {
@@ -122,6 +129,37 @@ export function usePreferences() {
     });
   }, []);
 
+  const isCountryEnabled = useCallback(
+    (language: LanguageCode, country: CountryCode) =>
+      !prefs.disabledCountries.includes(countryKey(language, country)),
+    [prefs.disabledCountries],
+  );
+
+  const toggleCountry = useCallback((language: LanguageCode, country: CountryCode) => {
+    setPrefs((p) => {
+      const key = countryKey(language, country);
+      const disabled = new Set(p.disabledCountries);
+      if (disabled.has(key)) disabled.delete(key);
+      else disabled.add(key);
+      return { ...p, disabledCountries: Array.from(disabled) };
+    });
+  }, []);
+
+  const setCountriesEnabled = useCallback(
+    (language: LanguageCode, countries: CountryCode[], enabled: boolean) => {
+      setPrefs((p) => {
+        const disabled = new Set(p.disabledCountries);
+        for (const country of countries) {
+          const key = countryKey(language, country);
+          if (enabled) disabled.delete(key);
+          else disabled.add(key);
+        }
+        return { ...p, disabledCountries: Array.from(disabled) };
+      });
+    },
+    [],
+  );
+
   const addCustomSource = useCallback((source: Source) => {
     setPrefs((p) => {
       if (p.customSources.some((s) => s.id === source.id)) return p;
@@ -141,12 +179,14 @@ export function usePreferences() {
     prefs,
     hydrated,
     setLanguage,
-    setCountry,
     setCategory,
     toggleTheme,
     isSourceEnabled,
     toggleSource,
     setSourcesEnabled,
+    isCountryEnabled,
+    toggleCountry,
+    setCountriesEnabled,
     addCustomSource,
     removeCustomSource,
   };
