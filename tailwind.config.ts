@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['var(--font-serif)', 'Georgia', 'serif'],
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Comic Sans MS', 'cursive'],
+        sans: ['var(--font-sans)', 'Times New Roman', 'serif'],
       },
       colors: {
         paper: {

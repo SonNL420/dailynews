@@ -3,31 +3,32 @@
 @tailwind utilities;
 
 :root {
-  /* Fonts are loaded via <link> in the layout (not next/font) so builds never
-     need network access; these are the family names with graceful fallbacks. */
-  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* System fonts only (no webfont fetch): Comic Sans for headlines, Times New
+     Roman for body text — exactly what a 1999 homepage would ship with. */
+  --font-serif: 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', cursive;
+  --font-sans: 'Times New Roman', Times, Georgia, serif;
 
-  /* warm editorial "paper" light theme — values are R G B for rgb(var() / a) */
-  --paper: 250 249 246;
-  --paper-subtle: 243 241 235;
-  --ink: 24 23 21;
-  --ink-muted: 92 88 82;
-  --ink-faint: 140 135 128;
-  --line: 224 219 209;
-  --accent: 178 34 34;
-  --accent-soft: 246 226 222;
+  /* "GeoCities" light theme — values are R G B for rgb(var() / a) */
+  --paper: 255 255 224;
+  --paper-subtle: 224 255 255;
+  --ink: 0 0 0;
+  --ink-muted: 0 0 128;
+  --ink-faint: 90 90 90;
+  --line: 0 0 0;
+  --accent: 255 0 0;
+  --accent-soft: 255 255 0;
 }
 
 .dark {
-  --paper: 19 18 20;
-  --paper-subtle: 28 27 30;
-  --ink: 237 235 230;
-  --ink-muted: 169 165 158;
-  --ink-faint: 120 116 110;
-  --line: 49 47 52;
-  --accent: 248 113 113;
-  --accent-soft: 58 33 33;
+  /* "BBS / terminal" dark theme */
+  --paper: 0 0 0;
+  --paper-subtle: 0 24 0;
+  --ink: 0 255 0;
+  --ink-muted: 0 190 0;
+  --ink-faint: 0 120 0;
+  --line: 0 255 0;
+  --accent: 255 255 0;
+  --accent-soft: 0 48 0;
 }
 
 html {
@@ -37,34 +38,156 @@ html {
 body {
   background-color: rgb(var(--paper));
   color: rgb(var(--ink));
-  font-feature-settings: 'kern', 'liga';
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  font-family: var(--font-sans);
+  /* Tiled GeoCities starfield wallpaper, visible around the centered page. */
+  background-image:
+    radial-gradient(circle, rgba(255, 0, 255, 0.55) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(0, 255, 255, 0.5) 1px, transparent 1.5px),
+    linear-gradient(135deg, #6a00ff 0%, #ff00c8 50%, #00c8ff 100%);
+  background-size: 48px 48px, 32px 32px, cover;
+  background-position: 0 0, 16px 16px, 0 0;
+  background-attachment: fixed;
+}
+
+.dark body {
+  font-family: 'Courier New', Courier, monospace;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 0, 0.06) 0px,
+      rgba(0, 255, 0, 0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  background-color: #000;
+}
+
+.dark h1,
+.dark h2,
+.dark .font-serif {
+  font-family: 'Courier New', Courier, monospace !important;
 }
 
 ::selection {
-  background: rgb(var(--accent) / 0.18);
+  background: rgb(var(--accent));
+  color: rgb(var(--paper));
 }
 
-/* Skeleton shimmer for loading cards */
-@keyframes shimmer {
-  0% { background-position: -480px 0; }
-  100% { background-position: 480px 0; }
+/* ── Retro chrome kit ──────────────────────────────────────────────────── */
+
+/* Windows-98-style raised/beveled button. Add .pressed for the inset "active
+   tab" look. */
+.win98-btn {
+  background: #c0c0c0;
+  color: #000;
+  border: 2px solid;
+  border-color: #fff #404040 #404040 #fff;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+  font-family: var(--font-sans);
+}
+.win98-btn:active,
+.win98-btn.pressed {
+  border-color: #404040 #fff #fff #404040;
+  box-shadow: inset -1px -1px 0 #dfdfdf, inset 1px 1px 0 #808080;
+  padding-top: 1px;
+}
+.dark .win98-btn {
+  background: #001a00;
+  color: rgb(var(--ink));
+  border-color: rgb(var(--ink)) #003300 #003300 rgb(var(--ink));
+  box-shadow: none;
+}
+.dark .win98-btn:active,
+.dark .win98-btn.pressed {
+  border-color: #003300 rgb(var(--ink)) rgb(var(--ink)) #003300;
 }
 
-.skeleton {
+/* Animated horizontal rainbow rule — the ubiquitous 1999 <hr> divider. */
+.rainbow-rule {
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    red, orange, yellow, lime, cyan, blue, violet, red
+  );
+  background-size: 200% 100%;
+  animation: rainbow-shift 3s linear infinite;
+  border: none;
+}
+
+/* Animated rainbow gradient text for the site logo. */
+.rainbow-text {
   background-image: linear-gradient(
     90deg,
-    rgb(var(--paper-subtle)) 0%,
-    rgb(var(--line) / 0.55) 50%,
-    rgb(var(--paper-subtle)) 100%
+    red, orange, yellow, lime, cyan, blue, violet, red
   );
-  background-size: 480px 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: rainbow-shift 4s linear infinite;
+}
+@keyframes rainbow-shift {
+  to { background-position: 200% center; }
+}
+
+/* Marquee scroller (CSS-driven, works everywhere the deprecated tag doesn't). */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  border: 3px ridge rgb(var(--line));
+  background: rgb(var(--paper-subtle));
+}
+.marquee-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee-scroll 22s linear infinite;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* Classic blink. */
+.blink {
+  animation: blink-opacity 1s steps(1, end) infinite;
+}
+@keyframes blink-opacity {
+  50% { opacity: 0; }
+}
+
+/* Diagonal construction-barricade stripes. */
+.construction-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #000 0 12px,
+    #ffcc00 12px 24px
+  );
+}
+
+/* Thick beveled "table" panel — the workhorse content container. */
+.retro-panel {
+  border: 3px solid rgb(var(--line));
+  background: rgb(var(--paper));
+  box-shadow: 4px 4px 0 rgb(var(--ink) / 0.25);
+}
+
+/* Digital odometer-style hit counter. */
+.led-counter {
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 0.15em;
+  background: #000;
+  color: #ff2222;
+  border: 3px inset #888;
+  padding: 2px 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skeleton { animation: none; }
+  .blink,
+  .rainbow-rule,
+  .rainbow-text,
+  .marquee-track {
+    animation: none;
+  }
 }
 
 /* Thin, theme-aware scrollbars */

@@ -26,10 +26,8 @@ export function LanguageTabs({ active, onChange }: LanguageTabsProps) {
                 aria-current={isActive ? 'true' : undefined}
                 title={lang.englishLabel}
                 className={[
-                  'group relative whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition',
-                  isActive
-                    ? 'bg-ink text-paper'
-                    : 'text-ink-muted hover:bg-paper-subtle hover:text-ink',
+                  'win98-btn whitespace-nowrap px-3 py-1.5 text-sm font-bold',
+                  isActive ? 'pressed bg-yellow-200 dark:bg-black' : '',
                 ].join(' ')}
               >
                 <span className="mr-1.5" aria-hidden>

@@ -16,7 +16,7 @@ export function CategoryTabs({ language, active, available, onChange }: Category
 
   return (
     <nav aria-label="Category" className="-mx-1 overflow-x-auto">
-      <ul className="flex min-w-max items-center gap-4 px-1 text-sm">
+      <ul className="flex min-w-max items-center gap-3 px-1 text-sm">
         <CategoryItem
           label={allLabel(language)}
           isActive={active === 'all'}
@@ -51,13 +51,11 @@ function CategoryItem({
         onClick={onClick}
         aria-current={isActive ? 'true' : undefined}
         className={[
-          'whitespace-nowrap border-b-2 pb-2 pt-1 font-medium transition',
-          isActive
-            ? 'border-accent text-ink'
-            : 'border-transparent text-ink-muted hover:text-ink',
+          'whitespace-nowrap font-bold underline',
+          isActive ? 'text-accent' : 'text-ink-muted visited:text-ink-muted hover:text-accent',
         ].join(' ')}
       >
-        {label}
+        [&nbsp;{label}&nbsp;]
       </button>
     </li>
   );

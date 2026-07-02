@@ -49,16 +49,12 @@ export function SourceManager(props: SourceManagerProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label="Manage sources">
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden
-      />
-      <div className="relative flex h-full w-full max-w-md flex-col bg-paper shadow-2xl">
-        <header className="flex items-center justify-between border-b border-line px-5 py-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden />
+      <div className="retro-panel relative flex h-full w-full max-w-md flex-col !border-l-4">
+        <header className="flex items-center justify-between bg-gradient-to-r from-blue-900 to-cyan-700 px-3 py-1.5 dark:from-black dark:to-green-950">
           <div>
-            <h2 className="font-serif text-lg font-semibold text-ink">Manage sources</h2>
-            <p className="text-xs text-ink-muted">
+            <h2 className="font-serif text-base font-bold text-white">📁 Manage Sources</h2>
+            <p className="text-xs text-cyan-100">
               {langInfo.flag} {langInfo.nativeLabel} · {langInfo.englishLabel}
             </p>
           </div>
@@ -66,9 +62,9 @@ export function SourceManager(props: SourceManagerProps) {
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-paper-subtle hover:text-ink"
+            className="win98-btn inline-flex h-6 w-6 items-center justify-center text-xs font-bold text-black"
           >
-            <CloseIcon />
+            <CloseIcon width={14} height={14} />
           </button>
         </header>
 
@@ -130,8 +126,8 @@ function AddCustomSourceForm({
   }
 
   return (
-    <form onSubmit={submit} className="rounded-xl border border-line bg-paper-subtle/60 p-4">
-      <h3 className="mb-3 text-sm font-semibold text-ink">Add a custom RSS feed</h3>
+    <form onSubmit={submit} className="retro-panel p-4">
+      <h3 className="mb-3 font-serif text-sm font-bold text-accent">✏️ Add a custom RSS feed</h3>
       <div className="space-y-2.5">
         <input
           type="url"
@@ -139,21 +135,21 @@ function AddCustomSourceForm({
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://example.com/rss.xml"
-          className="w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-faint focus:border-accent"
+          className="w-full border-2 border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-faint"
         />
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Display name (optional)"
-          className="w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-faint focus:border-accent"
+          className="w-full border-2 border-line bg-paper px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-faint"
         />
         <div className="grid grid-cols-3 gap-2">
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value as LanguageCode)}
             aria-label="Language"
-            className="rounded-lg border border-line bg-paper px-2 py-2 text-sm text-ink outline-none focus:border-accent"
+            className="border-2 border-line bg-paper px-2 py-2 text-sm text-ink outline-none"
           >
             {LANGUAGES.map((l) => (
               <option key={l.code} value={l.code}>
@@ -168,13 +164,13 @@ function AddCustomSourceForm({
             placeholder="CC"
             maxLength={2}
             aria-label="Country code"
-            className="rounded-lg border border-line bg-paper px-2 py-2 text-sm uppercase text-ink outline-none placeholder:text-ink-faint focus:border-accent"
+            className="border-2 border-line bg-paper px-2 py-2 text-sm uppercase text-ink outline-none placeholder:text-ink-faint"
           />
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as Category)}
             aria-label="Category"
-            className="rounded-lg border border-line bg-paper px-2 py-2 text-sm text-ink outline-none focus:border-accent"
+            className="border-2 border-line bg-paper px-2 py-2 text-sm text-ink outline-none"
           >
             {CATEGORY_ORDER.map((c) => (
               <option key={c} value={c}>
@@ -183,11 +179,8 @@ function AddCustomSourceForm({
             ))}
           </select>
         </div>
-        {error && <p className="text-xs text-accent">{error}</p>}
-        <button
-          type="submit"
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:opacity-90"
-        >
+        {error && <p className="text-xs font-bold text-accent">{error}</p>}
+        <button type="submit" className="win98-btn inline-flex w-full items-center justify-center gap-1.5 px-3 py-2 text-sm font-bold">
           <PlusIcon width={16} height={16} />
           Add feed
         </button>
@@ -208,14 +201,14 @@ function CustomSourceList({
 
   return (
     <section className="mt-6">
-      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-faint">
-        Your feeds
+      <h3 className="mb-2 text-xs font-bold uppercase tracking-wide text-ink-faint">
+        ★ Your Feeds ★
       </h3>
       <ul className="space-y-1">
         {mine.map((source) => (
           <li
             key={source.id}
-            className="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 hover:bg-paper-subtle"
+            className="flex items-center justify-between gap-2 border-2 border-line px-2 py-1.5"
           >
             <SourceToggle
               source={source}
@@ -261,26 +254,26 @@ function BuiltinSourceList({
   return (
     <section className="mt-6">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Outlets</h3>
-        <div className="flex gap-3 text-xs">
-          <button type="button" className="text-ink-muted hover:text-ink" onClick={() => setSourcesEnabled(allIds, true)}>
-            Enable all
+        <h3 className="text-xs font-bold uppercase tracking-wide text-ink-faint">★ Outlets ★</h3>
+        <div className="flex gap-3 text-xs font-bold underline">
+          <button type="button" className="text-ink-muted hover:text-accent" onClick={() => setSourcesEnabled(allIds, true)}>
+            [ Enable all ]
           </button>
-          <button type="button" className="text-ink-muted hover:text-ink" onClick={() => setSourcesEnabled(allIds, false)}>
-            Disable all
+          <button type="button" className="text-ink-muted hover:text-accent" onClick={() => setSourcesEnabled(allIds, false)}>
+            [ Disable all ]
           </button>
         </div>
       </div>
 
       {groups.map(([country, sources]) => (
         <div key={country} className="mb-4">
-          <p className="mb-1 flex items-center gap-1.5 text-sm font-medium text-ink">
+          <p className="mb-1 flex items-center gap-1.5 text-sm font-bold text-ink">
             <span aria-hidden>{flagEmoji(country)}</span>
             {countryName(country)}
           </p>
           <ul className="space-y-1">
             {sources.map((source) => (
-              <li key={source.id} className="rounded-lg px-2 py-1.5 hover:bg-paper-subtle">
+              <li key={source.id} className="border-2 border-transparent px-2 py-1.5 hover:border-line">
                 <SourceToggle
                   source={source}
                   language={language}
@@ -310,24 +303,15 @@ function SourceToggle({
   return (
     <label className="flex flex-1 cursor-pointer items-center justify-between gap-3">
       <span className="min-w-0">
-        <span className="block truncate text-sm text-ink">{source.name}</span>
+        <span className="block truncate text-sm text-ink">{enabled ? source.name : <s>{source.name}</s>}</span>
         <span className="block text-xs text-ink-faint">{categoryLabel(source.category, language)}</span>
       </span>
-      <input type="checkbox" className="sr-only" checked={enabled} onChange={onToggle} />
-      <span
-        aria-hidden
-        className={[
-          'relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition',
-          enabled ? 'bg-accent' : 'bg-line',
-        ].join(' ')}
-      >
-        <span
-          className={[
-            'inline-block h-4 w-4 transform rounded-full bg-paper shadow transition',
-            enabled ? 'translate-x-4' : 'translate-x-0.5',
-          ].join(' ')}
-        />
-      </span>
+      <input
+        type="checkbox"
+        checked={enabled}
+        onChange={onToggle}
+        className="h-5 w-5 flex-shrink-0 accent-accent"
+      />
     </label>
   );
 }

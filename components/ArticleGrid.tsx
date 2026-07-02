@@ -13,16 +13,11 @@ interface ArticleGridProps {
 
 export function ArticleGrid({ articles, language, loading, error, emptyHint }: ArticleGridProps) {
   if (loading && articles.length === 0) {
-    return <SkeletonGrid />;
+    return <RetroLoading />;
   }
 
   if (error && articles.length === 0) {
-    return (
-      <EmptyState
-        title="Couldn’t load the news"
-        body={error}
-      />
-    );
+    return <EmptyState title="⚠️ Oops! Couldn’t load the news ⚠️" body={error} />;
   }
 
   if (articles.length === 0) {
@@ -43,29 +38,19 @@ export function ArticleGrid({ articles, language, loading, error, emptyHint }: A
   );
 }
 
-function SkeletonGrid() {
+function RetroLoading() {
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-hidden>
-      {Array.from({ length: 9 }).map((_, i) => (
-        <div key={i} className="overflow-hidden rounded-xl border border-line bg-paper">
-          <div className="skeleton aspect-[16/9] w-full" />
-          <div className="flex flex-col gap-3 p-4">
-            <div className="skeleton h-3 w-1/3 rounded" />
-            <div className="skeleton h-5 w-full rounded" />
-            <div className="skeleton h-5 w-4/5 rounded" />
-            <div className="skeleton h-3 w-full rounded" />
-            <div className="skeleton h-3 w-2/3 rounded" />
-          </div>
-        </div>
-      ))}
+    <div className="retro-panel flex flex-col items-center gap-3 px-6 py-20 text-center" aria-hidden>
+      <p className="blink font-serif text-2xl font-bold text-accent">⏳ Loading headlines... please wait ⏳</p>
+      <p className="text-sm text-ink-muted">(This may take a moment over a 56k connection)</p>
     </div>
   );
 }
 
 function EmptyState({ title, body }: { title: string; body: string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-line px-6 py-20 text-center">
-      <p className="font-serif text-xl font-semibold text-ink">{title}</p>
+    <div className="retro-panel flex flex-col items-center justify-center px-6 py-20 text-center">
+      <p className="font-serif text-xl font-bold text-accent">{title}</p>
       <p className="mt-2 max-w-md text-sm text-ink-muted">{body}</p>
     </div>
   );
@@ -75,14 +60,14 @@ function EmptyState({ title, body }: { title: string; body: string }) {
 export function SourceErrorBanner({ errors }: { errors: FeedError[] }) {
   if (errors.length === 0) return null;
   return (
-    <details className="rounded-lg border border-line bg-paper-subtle px-4 py-2 text-sm text-ink-muted">
-      <summary className="cursor-pointer font-medium text-ink">
-        {errors.length} source{errors.length > 1 ? 's' : ''} couldn’t be loaded
+    <details className="retro-panel px-4 py-2 text-sm text-ink-muted">
+      <summary className="cursor-pointer font-bold text-accent">
+        ⚠️ {errors.length} source{errors.length > 1 ? 's' : ''} couldn’t be loaded
       </summary>
       <ul className="mt-2 space-y-1">
         {errors.map((e) => (
           <li key={e.sourceId} className="flex justify-between gap-4">
-            <span className="font-medium">{e.sourceId}</span>
+            <span className="font-bold">{e.sourceId}</span>
             <span className="text-ink-faint">{e.message}</span>
           </li>
         ))}

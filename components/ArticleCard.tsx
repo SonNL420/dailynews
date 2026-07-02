@@ -7,19 +7,24 @@ import { flagEmoji } from '@/lib/countries';
 import { absoluteTime, relativeTime } from '@/lib/time';
 import { ExternalIcon } from './icons';
 
+const RECENT_MS = 2 * 60 * 60 * 1000; // 2 hours
+
 export function ArticleCard({ article, language }: { article: Article; language: LanguageCode }) {
   const [imgFailed, setImgFailed] = useState(false);
   const showImage = article.imageUrl && !imgFailed;
+  const isRecent = Date.now() - new Date(article.publishedAt).getTime() < RECENT_MS;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border border-line bg-paper transition hover:-translate-y-0.5 hover:border-ink-faint hover:shadow-[0_8px_30px_rgb(0_0_0/0.06)]">
+    <article className="retro-panel flex flex-col">
+      {/* Link color is set here (not on the heading) so the browser's real
+          :visited state colors the headline, just like a 1999 homepage. */}
       <a
         href={article.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-full flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex h-full flex-col text-blue-800 visited:text-purple-900 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent dark:text-cyan-300 dark:visited:text-fuchsia-400 dark:hover:text-yellow-300"
       >
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-paper-subtle">
+        <div className="relative aspect-[16/9] w-full overflow-hidden border-b-4 border-line bg-paper-subtle">
           {showImage ? (
             // Feed images come from arbitrary CDNs — a plain lazy <img> avoids
             // next/image's domain allowlist. Fallback handled via onError.
@@ -30,7 +35,7 @@ export function ArticleCard({ article, language }: { article: Article; language:
               loading="lazy"
               referrerPolicy="no-referrer"
               onError={() => setImgFailed(true)}
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
@@ -39,14 +44,19 @@ export function ArticleCard({ article, language }: { article: Article; language:
               </span>
             </div>
           )}
-          <span className="absolute left-3 top-3 rounded-full bg-paper/85 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent backdrop-blur-sm">
+          <span className="absolute left-2 top-2 border-2 border-line bg-accent-soft px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-ink">
             {categoryLabel(article.category, language)}
           </span>
+          {isRecent && (
+            <span className="blink absolute right-2 top-2 border-2 border-line bg-accent px-2 py-0.5 text-[11px] font-bold uppercase text-white">
+              🆕 New!
+            </span>
+          )}
         </div>
 
         <div className="flex flex-1 flex-col gap-2 p-4">
           <div className="flex items-center gap-2 text-xs text-ink-muted">
-            <span className="font-medium text-ink">{article.sourceName}</span>
+            <span className="font-bold">{article.sourceName}</span>
             <span aria-hidden title={article.country}>
               {flagEmoji(article.country)}
             </span>
@@ -56,16 +66,14 @@ export function ArticleCard({ article, language }: { article: Article; language:
             </time>
           </div>
 
-          <h2 className="font-serif text-lg font-semibold leading-snug text-ink transition group-hover:text-accent">
-            {article.title}
-          </h2>
+          <h2 className="font-serif text-lg font-bold leading-snug">{article.title}</h2>
 
           {article.summary && (
             <p className="line-clamp-3 text-sm leading-relaxed text-ink-muted">{article.summary}</p>
           )}
 
-          <span className="mt-auto inline-flex items-center gap-1 pt-1 text-xs font-medium text-ink-faint">
-            Read at source
+          <span className="mt-auto inline-flex items-center gap-1 pt-1 text-xs font-bold">
+            Click here to read more!
             <ExternalIcon width={13} height={13} />
           </span>
         </div>

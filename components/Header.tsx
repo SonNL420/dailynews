@@ -26,13 +26,15 @@ export function Header({
   onToggleTheme,
 }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-paper/85 backdrop-blur-md">
+    <header className="sticky top-0 z-30 bg-paper">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-baseline gap-2">
-            <h1 className="font-serif text-2xl font-bold tracking-tight text-ink">Daily News</h1>
+            <h1 className="rainbow-text font-serif text-3xl font-bold tracking-tight">
+              Daily News
+            </h1>
             <span className="hidden text-sm text-ink-faint sm:inline">
-              your world, one language at a time
+              *~* your world, one language at a time *~*
             </span>
           </div>
 
@@ -42,14 +44,14 @@ export function Header({
               onClick={onRefresh}
               aria-label="Refresh"
               title="Refresh"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink-muted transition hover:bg-paper-subtle hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="win98-btn inline-flex h-9 w-9 items-center justify-center"
             >
               <RefreshIcon className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               type="button"
               onClick={onOpenSources}
-              className="inline-flex h-9 items-center gap-1.5 rounded-full border border-line px-3 text-sm font-medium text-ink-muted transition hover:bg-paper-subtle hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="win98-btn inline-flex h-9 items-center gap-1.5 px-3 text-sm font-bold"
             >
               <SlidersIcon width={16} height={16} />
               <span className="hidden sm:inline">Sources</span>
@@ -60,6 +62,7 @@ export function Header({
 
         <LanguageTabs active={language} onChange={onLanguageChange} />
       </div>
+      <hr className="rainbow-rule" />
     </header>
   );
 }

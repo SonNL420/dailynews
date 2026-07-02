@@ -33,8 +33,13 @@ narrow by country and category.
   isolated and surfaced in a collapsible banner.
 - **Local-only preferences.** Language, enabled sources, custom feeds, filters
   and theme are stored in `localStorage`. No accounts, no database, no tracking.
-- **Light / dark mode**, responsive layout, accessible markup, editorial-modern
-  typography (Newsreader serif headlines + Inter UI).
+- **A design that looks like it was spawned in 1999.** Tiled GeoCities
+  starfield wallpaper, Comic Sans headlines, Windows-98-style beveled buttons,
+  a scrolling marquee, an "under construction" barricade banner, a real
+  LED-style hit counter, `:visited` link coloring on headlines, and a
+  "GeoCities ↔ BBS mode" toggle that swaps the whole palette for a
+  green-on-black terminal theme. Fully responsive, accessible, and — despite
+  appearances — a real working app underneath.
 
 ## Tech stack
 
