@@ -13,6 +13,7 @@ import { SourceManager } from '@/components/SourceManager';
 import { Marquee } from '@/components/Marquee';
 import { HitCounter } from '@/components/HitCounter';
 import { RetroJokeModal } from '@/components/RetroJokeModal';
+import { is1999Era } from '@/lib/themes';
 
 const JOKE_MESSAGES = [
   'There is no WebRing. It’s 2026. But wasn’t it fun to pretend? 💾',
@@ -27,7 +28,7 @@ export default function Home() {
     hydrated,
     setLanguage,
     setCategory,
-    toggleTheme,
+    setTheme,
     isSourceEnabled,
     toggleSource,
     setSourcesEnabled,
@@ -38,6 +39,7 @@ export default function Home() {
     removeCustomSource,
   } = usePreferences();
   const language = prefs.language;
+  const retro = is1999Era(prefs.theme);
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [jokeMessage, setJokeMessage] = useState<string | null>(null);
   const showRandomJoke = () =>
@@ -114,18 +116,22 @@ export default function Home() {
         onRefresh={refresh}
         loading={loading}
         theme={prefs.theme}
-        onToggleTheme={toggleTheme}
+        onSelectTheme={setTheme}
       />
 
-      <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
-        <Marquee text="★彡 WELCOME TO DAILY NEWS — YOUR #1 SOURCE FOR WORLD NEWS — NOW WITH 9 LANGUAGES!!! 彡★ ・ BEST VIEWED AT 800×600 RESOLUTION ・ NO FRAMES REQUIRED ・ SIGN MY GUESTBOOK BELOW ・" />
-      </div>
+      {retro && (
+        <>
+          <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6">
+            <Marquee text="★彡 WELCOME TO DAILY NEWS — YOUR #1 SOURCE FOR WORLD NEWS — NOW WITH 9 LANGUAGES!!! 彡★ ・ BEST VIEWED AT 800×600 RESOLUTION ・ NO FRAMES REQUIRED ・ SIGN MY GUESTBOOK BELOW ・" />
+          </div>
 
-      <div className="construction-stripes mx-auto mt-3 flex h-6 max-w-6xl items-center justify-center sm:mx-auto">
-        <span className="blink bg-black px-2 font-serif text-xs font-bold text-yellow-300">
-          🚧 SITE PERPETUALLY UNDER CONSTRUCTION 🚧
-        </span>
-      </div>
+          <div className="construction-stripes mx-auto mt-3 flex h-6 max-w-6xl items-center justify-center sm:mx-auto">
+            <span className="blink bg-black px-2 font-serif text-xs font-bold text-yellow-300">
+              🚧 SITE PERPETUALLY UNDER CONSTRUCTION 🚧
+            </span>
+          </div>
+        </>
+      )}
 
       <main className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6">
         <div className="space-y-3 border-b-4 border-line pb-4">
@@ -171,45 +177,53 @@ export default function Home() {
       </main>
 
       <footer className="mx-auto max-w-6xl space-y-5 px-4 py-10 text-center sm:px-6">
-        <hr className="rainbow-rule" />
+        <hr className={retro ? 'rainbow-rule' : 'border-t border-line'} />
 
-        <HitCounter />
+        {retro && (
+          <>
+            <HitCounter />
 
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          {['NO FRAMES', 'BEST AT 800×600', '56K OR BUST', 'Y2K COMPLIANT', 'HTML 3.2'].map((badge) => (
-            <span key={badge} className="win98-btn px-2 py-1 text-[10px] font-bold">
-              {badge}
-            </span>
-          ))}
-        </div>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {['NO FRAMES', 'BEST AT 800×600', '56K OR BUST', 'Y2K COMPLIANT', 'HTML 3.2'].map((badge) => (
+                <span key={badge} className="theme-btn px-2 py-1 text-[10px] font-bold">
+                  {badge}
+                </span>
+              ))}
+            </div>
 
-        <p className="text-sm font-bold text-ink-muted">
-          <button type="button" onClick={showRandomJoke} className="underline hover:text-accent">
-            ⟨⟨ Previous
-          </button>
-          {' | This site is a member of the Daily News WebRing | '}
-          <button type="button" onClick={showRandomJoke} className="underline hover:text-accent">
-            Random
-          </button>
-          {' | '}
-          <button type="button" onClick={showRandomJoke} className="underline hover:text-accent">
-            Next ⟩⟩
-          </button>
-        </p>
+            <p className="text-sm font-bold text-ink-muted">
+              <button type="button" onClick={showRandomJoke} className="underline hover:text-accent">
+                ⟨⟨ Previous
+              </button>
+              {' | This site is a member of the Daily News WebRing | '}
+              <button type="button" onClick={showRandomJoke} className="underline hover:text-accent">
+                Random
+              </button>
+              {' | '}
+              <button type="button" onClick={showRandomJoke} className="underline hover:text-accent">
+                Next ⟩⟩
+              </button>
+            </p>
 
-        <button
-          type="button"
-          onClick={showRandomJoke}
-          className="win98-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold"
-        >
-          📝 Sign my Guestbook!
-        </button>
+            <button
+              type="button"
+              onClick={showRandomJoke}
+              className="theme-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold"
+            >
+              📝 Sign my Guestbook!
+            </button>
+          </>
+        )}
 
         <p className="text-xs text-ink-faint">
           Daily News aggregates public RSS feeds. Headlines link to the original
           outlet. Your sources and preferences are stored only in this browser.
-          <br />
-          Last updated: {new Date().toLocaleDateString()} · Made with 💾 and Comic Sans
+          {retro && (
+            <>
+              <br />
+              Last updated: {new Date().toLocaleDateString()} · Made with 💾 and Comic Sans
+            </>
+          )}
         </p>
       </footer>
 
@@ -219,6 +233,7 @@ export default function Home() {
         open={sourcesOpen}
         onClose={() => setSourcesOpen(false)}
         language={language}
+        theme={prefs.theme}
         builtinSources={builtinSources}
         customSources={prefs.customSources}
         isSourceEnabled={isSourceEnabled}

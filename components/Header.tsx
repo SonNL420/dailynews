@@ -2,9 +2,11 @@
 
 import { LanguageTabs } from './LanguageTabs';
 import { ThemeToggle } from './ThemeToggle';
+import { TrafficLights } from './TrafficLights';
+import { StatusBar } from './StatusBar';
 import { RefreshIcon, SlidersIcon } from './icons';
 import type { LanguageCode } from '@/lib/types';
-import type { ThemeMode } from '@/hooks/usePreferences';
+import { is1999Era, isPhoneEra, type ThemeId } from '@/lib/themes';
 
 interface HeaderProps {
   language: LanguageCode;
@@ -12,8 +14,8 @@ interface HeaderProps {
   onOpenSources: () => void;
   onRefresh: () => void;
   loading: boolean;
-  theme: ThemeMode;
-  onToggleTheme: () => void;
+  theme: ThemeId;
+  onSelectTheme: (theme: ThemeId) => void;
 }
 
 export function Header({
@@ -23,19 +25,30 @@ export function Header({
   onRefresh,
   loading,
   theme,
-  onToggleTheme,
+  onSelectTheme,
 }: HeaderProps) {
+  const retro = is1999Era(theme);
+
   return (
-    <header className="sticky top-0 z-30 bg-paper">
+    <header className={['sticky top-0 z-30', retro ? 'bg-paper' : 'title-bar'].join(' ')}>
+      {isPhoneEra(theme) && <StatusBar theme={theme} />}
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:px-6">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-baseline gap-2">
-            <h1 className="rainbow-text font-serif text-3xl font-bold tracking-tight">
+          <div className="flex items-center gap-2">
+            {theme === 'aqua' && <TrafficLights />}
+            <h1
+              className={[
+                'font-serif text-2xl font-bold tracking-tight sm:text-3xl',
+                retro ? 'rainbow-text' : 'text-[rgb(var(--titlebar-fg))]',
+              ].join(' ')}
+            >
               Daily News
             </h1>
-            <span className="hidden text-sm text-ink-faint sm:inline">
-              *~* your world, one language at a time *~*
-            </span>
+            {retro && (
+              <span className="hidden text-sm text-ink-faint sm:inline">
+                *~* your world, one language at a time *~*
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -44,25 +57,25 @@ export function Header({
               onClick={onRefresh}
               aria-label="Refresh"
               title="Refresh"
-              className="win98-btn inline-flex h-9 w-9 items-center justify-center"
+              className="theme-btn inline-flex h-9 w-9 items-center justify-center"
             >
               <RefreshIcon className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               type="button"
               onClick={onOpenSources}
-              className="win98-btn inline-flex h-9 items-center gap-1.5 px-3 text-sm font-bold"
+              className="theme-btn inline-flex h-9 items-center gap-1.5 px-3 text-sm font-bold"
             >
               <SlidersIcon width={16} height={16} />
               <span className="hidden sm:inline">Sources</span>
             </button>
-            <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+            <ThemeToggle theme={theme} onSelect={onSelectTheme} />
           </div>
         </div>
 
         <LanguageTabs active={language} onChange={onLanguageChange} />
       </div>
-      <hr className="rainbow-rule" />
+      {retro && <hr className="rainbow-rule" />}
     </header>
   );
 }

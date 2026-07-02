@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Category, CountryCode, LanguageCode, Source } from '@/lib/types';
 import { DEFAULT_LANGUAGE, isLanguageCode } from '@/lib/languages';
+import { DEFAULT_THEME, normalizeLegacyTheme, type ThemeId } from '@/lib/themes';
 
-export type ThemeMode = 'light' | 'dark';
+export type { ThemeId } from '@/lib/themes';
 
 export interface Preferences {
   language: LanguageCode;
@@ -18,7 +19,7 @@ export interface Preferences {
    */
   disabledCountries: string[];
   customSources: Source[];
-  theme: ThemeMode;
+  theme: ThemeId;
 }
 
 const STORAGE_KEY = 'dailynews:prefs:v1';
@@ -29,7 +30,7 @@ const DEFAULT_PREFS: Preferences = {
   disabledSourceIds: [],
   disabledCountries: [],
   customSources: [],
-  theme: 'light',
+  theme: DEFAULT_THEME,
 };
 
 function countryKey(language: LanguageCode, country: CountryCode): string {
@@ -43,9 +44,9 @@ function loadPrefs(): Preferences {
     if (!raw) {
       const prefersDark =
         window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-      return { ...DEFAULT_PREFS, theme: prefersDark ? 'dark' : 'light' };
+      return { ...DEFAULT_PREFS, theme: prefersDark ? 'bbs' : 'geocities' };
     }
-    const parsed = JSON.parse(raw) as Partial<Preferences>;
+    const parsed = JSON.parse(raw) as Partial<Preferences> & { theme?: string };
     return {
       ...DEFAULT_PREFS,
       ...parsed,
@@ -53,6 +54,7 @@ function loadPrefs(): Preferences {
         parsed.language && isLanguageCode(parsed.language)
           ? parsed.language
           : DEFAULT_PREFS.language,
+      theme: parsed.theme ? normalizeLegacyTheme(parsed.theme) : DEFAULT_PREFS.theme,
       disabledSourceIds: Array.isArray(parsed.disabledSourceIds)
         ? parsed.disabledSourceIds
         : [],
@@ -86,10 +88,10 @@ export function usePreferences() {
     }
   }, [prefs, hydrated]);
 
-  // Reflect theme on <html> for Tailwind's `dark:` variants.
+  // Reflect the active theme on <html> so globals.css can key off [data-theme].
   useEffect(() => {
     if (!hydrated) return;
-    document.documentElement.classList.toggle('dark', prefs.theme === 'dark');
+    document.documentElement.dataset.theme = prefs.theme;
   }, [prefs.theme, hydrated]);
 
   const setLanguage = useCallback((language: LanguageCode) => {
@@ -100,8 +102,8 @@ export function usePreferences() {
     setPrefs((p) => ({ ...p, category }));
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setPrefs((p) => ({ ...p, theme: p.theme === 'dark' ? 'light' : 'dark' }));
+  const setTheme = useCallback((theme: ThemeId) => {
+    setPrefs((p) => ({ ...p, theme }));
   }, []);
 
   const isSourceEnabled = useCallback(
@@ -180,7 +182,7 @@ export function usePreferences() {
     hydrated,
     setLanguage,
     setCategory,
-    toggleTheme,
+    setTheme,
     isSourceEnabled,
     toggleSource,
     setSourcesEnabled,

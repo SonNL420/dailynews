@@ -15,14 +15,14 @@ export function ArticleCard({ article, language }: { article: Article; language:
   const isRecent = Date.now() - new Date(article.publishedAt).getTime() < RECENT_MS;
 
   return (
-    <article className="retro-panel flex flex-col">
+    <article className="theme-panel flex flex-col">
       {/* Link color is set here (not on the heading) so the browser's real
           :visited state colors the headline, just like a 1999 homepage. */}
       <a
         href={article.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-full flex-col text-blue-800 visited:text-purple-900 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent dark:text-cyan-300 dark:visited:text-fuchsia-400 dark:hover:text-yellow-300"
+        className="flex h-full flex-col text-link visited:text-link-visited hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <div className="relative aspect-[16/9] w-full overflow-hidden border-b-4 border-line bg-paper-subtle">
           {showImage ? (

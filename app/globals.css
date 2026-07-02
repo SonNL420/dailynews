@@ -2,13 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ══════════════════════════════════════════════════════════════════════════
+   Theme system: <html data-theme="..."> selects one of six eras. All themes
+   share the same components; each theme just redefines these CSS variables
+   plus a handful of "chrome" classes (.theme-btn, .theme-panel, .title-bar).
+   :root holds the defaults for the original "GeoCities" theme (1999).
+   ══════════════════════════════════════════════════════════════════════════ */
+
 :root {
-  /* System fonts only (no webfont fetch): Comic Sans for headlines, Times New
-     Roman for body text — exactly what a 1999 homepage would ship with. */
   --font-serif: 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', cursive;
   --font-sans: 'Times New Roman', Times, Georgia, serif;
 
-  /* "GeoCities" light theme — values are R G B for rgb(var() / a) */
+  /* values are R G B for rgb(var() / a) */
   --paper: 255 255 224;
   --paper-subtle: 224 255 255;
   --ink: 0 0 0;
@@ -17,18 +22,9 @@
   --line: 0 0 0;
   --accent: 255 0 0;
   --accent-soft: 255 255 0;
-}
-
-.dark {
-  /* "BBS / terminal" dark theme */
-  --paper: 0 0 0;
-  --paper-subtle: 0 24 0;
-  --ink: 0 255 0;
-  --ink-muted: 0 190 0;
-  --ink-faint: 0 120 0;
-  --line: 0 255 0;
-  --accent: 255 255 0;
-  --accent-soft: 0 48 0;
+  --link: 0 0 238;
+  --link-visited: 85 26 139;
+  --titlebar-fg: 255 255 255;
 }
 
 html {
@@ -39,7 +35,6 @@ body {
   background-color: rgb(var(--paper));
   color: rgb(var(--ink));
   font-family: var(--font-sans);
-  /* Tiled GeoCities starfield wallpaper, visible around the centered page. */
   background-image:
     radial-gradient(circle, rgba(255, 0, 255, 0.55) 1px, transparent 1.5px),
     radial-gradient(circle, rgba(0, 255, 255, 0.5) 1px, transparent 1.5px),
@@ -49,35 +44,241 @@ body {
   background-attachment: fixed;
 }
 
-.dark body {
-  font-family: 'Courier New', Courier, monospace;
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgba(0, 255, 0, 0.06) 0px,
-      rgba(0, 255, 0, 0.06) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-  background-color: #000;
-}
-
-.dark h1,
-.dark h2,
-.dark .font-serif {
-  font-family: 'Courier New', Courier, monospace !important;
-}
-
 ::selection {
   background: rgb(var(--accent));
   color: rgb(var(--paper));
 }
 
-/* ── Retro chrome kit ──────────────────────────────────────────────────── */
+/* ── BBS (1999 terminal) ─────────────────────────────────────────────────── */
+[data-theme='bbs'] {
+  --font-serif: 'Courier New', Courier, monospace;
+  --font-sans: 'Courier New', Courier, monospace;
+  --paper: 0 0 0;
+  --paper-subtle: 0 24 0;
+  --ink: 0 255 0;
+  --ink-muted: 0 190 0;
+  --ink-faint: 0 120 0;
+  --line: 0 255 0;
+  --accent: 255 255 0;
+  --accent-soft: 0 48 0;
+  --link: 0 255 255;
+  --link-visited: 255 0 255;
+  --titlebar-fg: 255 255 255;
+}
+[data-theme='bbs'] body {
+  background-color: #000;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 0, 0.06) 0px,
+    rgba(0, 255, 0, 0.06) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+[data-theme='bbs'] .theme-btn {
+  background: #001a00;
+  color: rgb(var(--ink));
+  border-color: rgb(var(--ink)) #003300 #003300 rgb(var(--ink));
+  box-shadow: none;
+}
+[data-theme='bbs'] .theme-btn:active,
+[data-theme='bbs'] .theme-btn.pressed {
+  border-color: #003300 rgb(var(--ink)) rgb(var(--ink)) #003300;
+}
+[data-theme='bbs'] .title-bar {
+  background: linear-gradient(90deg, #000 0%, #063d06 100%);
+  border-bottom: 2px solid rgb(var(--ink));
+}
 
-/* Windows-98-style raised/beveled button. Add .pressed for the inset "active
-   tab" look. */
-.win98-btn {
+/* ── Mac OS X "Aqua" (2002) ──────────────────────────────────────────────── */
+[data-theme='aqua'] {
+  --font-serif: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --paper: 236 240 245;
+  --paper-subtle: 219 232 246;
+  --ink: 25 25 25;
+  --ink-muted: 90 100 112;
+  --ink-faint: 142 150 160;
+  --line: 148 165 184;
+  --accent: 0 96 220;
+  --accent-soft: 203 226 250;
+  --link: 0 96 220;
+  --link-visited: 128 0 176;
+  --titlebar-fg: 30 30 30;
+}
+[data-theme='aqua'] body {
+  background-color: rgb(var(--paper));
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.65) 0px,
+    rgba(255, 255, 255, 0.65) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+  background-attachment: fixed;
+}
+[data-theme='aqua'] .theme-btn {
+  font-family: var(--font-sans);
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--line));
+  background: linear-gradient(to bottom, #ffffff 0%, #e3edfb 46%, #bfd8f6 50%, #eef4fc 100%);
+  color: rgb(var(--ink));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+}
+[data-theme='aqua'] .theme-btn:active,
+[data-theme='aqua'] .theme-btn.pressed {
+  background: linear-gradient(to bottom, #bcd6f7 0%, #8fb9ec 100%);
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.35);
+}
+[data-theme='aqua'] .theme-panel {
+  border: 1px solid rgb(var(--line));
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+}
+[data-theme='aqua'] .title-bar {
+  background: linear-gradient(to bottom, #f3f7fc 0%, #cfe0f2 45%, #a9c4e6 46%, #e3edfa 100%);
+  border-bottom: 1px solid rgb(var(--line));
+}
+
+/* ── Nokia Symbian S60 (2005) ────────────────────────────────────────────── */
+[data-theme='symbian'] {
+  --font-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --paper: 232 240 247;
+  --paper-subtle: 255 255 255;
+  --ink: 15 15 15;
+  --ink-muted: 70 82 94;
+  --ink-faint: 130 142 154;
+  --line: 118 152 184;
+  --accent: 0 76 153;
+  --accent-soft: 197 219 238;
+  --link: 0 76 153;
+  --link-visited: 90 50 140;
+  --titlebar-fg: 255 255 255;
+}
+[data-theme='symbian'] body {
+  background-color: rgb(var(--paper));
+  background-image: linear-gradient(to bottom, #eef4fa 0%, #dbe9f5 100%);
+  background-attachment: fixed;
+}
+[data-theme='symbian'] .theme-btn {
+  font-family: var(--font-sans);
+  font-weight: bold;
+  border-radius: 4px;
+  border: 1px solid #003a75;
+  background: linear-gradient(to bottom, #2a86d8 0%, #004c99 100%);
+  color: #fff;
+}
+[data-theme='symbian'] .theme-btn:active,
+[data-theme='symbian'] .theme-btn.pressed {
+  background: linear-gradient(to bottom, #003a75, #002d59);
+}
+[data-theme='symbian'] .theme-panel {
+  border: 1px solid rgb(var(--line));
+  border-radius: 4px;
+  box-shadow: none;
+}
+[data-theme='symbian'] .title-bar {
+  background: linear-gradient(to bottom, #2a86d8 0%, #004c99 100%);
+}
+
+/* ── Early iPhone OS (2008) ──────────────────────────────────────────────── */
+[data-theme='iphone'] {
+  --font-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --paper: 255 255 255;
+  --paper-subtle: 226 229 235;
+  --ink: 20 20 22;
+  --ink-muted: 90 90 95;
+  --ink-faint: 152 152 158;
+  --line: 201 201 206;
+  --accent: 28 110 230;
+  --accent-soft: 210 230 255;
+  --link: 0 92 230;
+  --link-visited: 100 60 180;
+  --titlebar-fg: 255 255 255;
+}
+[data-theme='iphone'] body {
+  background-color: rgb(var(--paper-subtle));
+  background-image: none;
+}
+[data-theme='iphone'] .theme-btn {
+  font-family: var(--font-sans);
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 1px solid #0c3f8c;
+  background: linear-gradient(to bottom, #5fa8ff 0%, #1c6ee6 50%, #0f57c9 51%, #1c6ee6 100%);
+  color: #fff;
+}
+[data-theme='iphone'] .theme-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 50% 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  border-radius: 9999px 9999px 0 0;
+  pointer-events: none;
+}
+[data-theme='iphone'] .theme-btn:active,
+[data-theme='iphone'] .theme-btn.pressed {
+  background: linear-gradient(to bottom, #0f57c9, #0c3f8c);
+}
+[data-theme='iphone'] .theme-panel {
+  border: 1px solid rgb(var(--line));
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.12);
+}
+[data-theme='iphone'] .title-bar {
+  background: linear-gradient(to bottom, #4c4c4c 0%, #1a1a1a 50%, #000000 51%, #2b2b2b 100%);
+  border-bottom: 1px solid #000;
+}
+
+/* ── Early Android "Eclair" (2010) ───────────────────────────────────────── */
+[data-theme='android'] {
+  --font-serif: 'Droid Sans', Roboto, Arial, sans-serif;
+  --font-sans: 'Droid Sans', Roboto, Arial, sans-serif;
+  --paper: 250 250 250;
+  --paper-subtle: 235 235 235;
+  --ink: 30 30 30;
+  --ink-muted: 90 90 90;
+  --ink-faint: 145 145 145;
+  --line: 200 200 200;
+  --accent: 107 142 35;
+  --accent-soft: 205 227 150;
+  --link: 51 122 183;
+  --link-visited: 128 90 190;
+  --titlebar-fg: 255 255 255;
+}
+[data-theme='android'] body {
+  background-color: rgb(var(--paper));
+  background-image: none;
+}
+[data-theme='android'] .theme-btn {
+  font-family: var(--font-sans);
+  border-radius: 3px;
+  border: 1px solid #1a1a1a;
+  background: linear-gradient(to bottom, #5a5a5a 0%, #333333 100%);
+  color: #fff;
+}
+[data-theme='android'] .theme-btn:active,
+[data-theme='android'] .theme-btn.pressed {
+  background: linear-gradient(to bottom, #262626, #101010);
+  box-shadow: inset 0 0 0 1px rgb(var(--accent));
+}
+[data-theme='android'] .theme-panel {
+  border: 1px solid rgb(var(--line));
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+}
+[data-theme='android'] .title-bar {
+  background: linear-gradient(to bottom, #3c3c3c, #1c1c1c);
+  border-bottom: 2px solid rgb(var(--accent));
+}
+
+/* ── Shared chrome kit (default = GeoCities look; themes above override) ─── */
+
+.theme-btn {
   background: #c0c0c0;
   color: #000;
   border: 2px solid;
@@ -85,41 +286,67 @@ body {
   box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
   font-family: var(--font-sans);
 }
-.win98-btn:active,
-.win98-btn.pressed {
+.theme-btn:active,
+.theme-btn.pressed {
   border-color: #404040 #fff #fff #404040;
   box-shadow: inset -1px -1px 0 #dfdfdf, inset 1px 1px 0 #808080;
   padding-top: 1px;
 }
-.dark .win98-btn {
-  background: #001a00;
-  color: rgb(var(--ink));
-  border-color: rgb(var(--ink)) #003300 #003300 rgb(var(--ink));
-  box-shadow: none;
-}
-.dark .win98-btn:active,
-.dark .win98-btn.pressed {
-  border-color: #003300 rgb(var(--ink)) rgb(var(--ink)) #003300;
+
+.theme-panel {
+  border: 3px solid rgb(var(--line));
+  background: rgb(var(--paper));
+  box-shadow: 4px 4px 0 rgb(var(--ink) / 0.25);
 }
 
-/* Animated horizontal rainbow rule — the ubiquitous 1999 <hr> divider. */
+.title-bar {
+  background: linear-gradient(90deg, #1e3a8a, #0e7490);
+}
+
+/* Decorative window traffic lights (Aqua only, rendered conditionally). */
+.traffic-lights {
+  display: inline-flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.traffic-lights .tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.5), 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+.traffic-lights .tl-red { background: #ff5f57; }
+.traffic-lights .tl-yellow { background: #febc2e; }
+.traffic-lights .tl-green { background: #28c840; }
+
+/* Fake device status bar (Symbian / iPhone / Android). */
+.phone-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  background: #000;
+  color: #fff;
+}
+[data-theme='symbian'] .phone-status-bar {
+  background: linear-gradient(to bottom, #2a86d8, #004c99);
+}
+
+/* ── Retro-only decoration (rainbow text/rule, marquee, blink, etc.) ──────
+   Used by the GeoCities/BBS "1999 homepage" joke chrome only. */
+
 .rainbow-rule {
   height: 5px;
-  background: linear-gradient(
-    90deg,
-    red, orange, yellow, lime, cyan, blue, violet, red
-  );
+  background: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
   background-size: 200% 100%;
   animation: rainbow-shift 3s linear infinite;
   border: none;
 }
 
-/* Animated rainbow gradient text for the site logo. */
 .rainbow-text {
-  background-image: linear-gradient(
-    90deg,
-    red, orange, yellow, lime, cyan, blue, violet, red
-  );
+  background-image: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, violet, red);
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
@@ -130,7 +357,6 @@ body {
   to { background-position: 200% center; }
 }
 
-/* Marquee scroller (CSS-driven, works everywhere the deprecated tag doesn't). */
 .marquee {
   overflow: hidden;
   white-space: nowrap;
@@ -147,7 +373,6 @@ body {
   to { transform: translateX(-100%); }
 }
 
-/* Classic blink. */
 .blink {
   animation: blink-opacity 1s steps(1, end) infinite;
 }
@@ -155,23 +380,10 @@ body {
   50% { opacity: 0; }
 }
 
-/* Diagonal construction-barricade stripes. */
 .construction-stripes {
-  background-image: repeating-linear-gradient(
-    45deg,
-    #000 0 12px,
-    #ffcc00 12px 24px
-  );
+  background-image: repeating-linear-gradient(45deg, #000 0 12px, #ffcc00 12px 24px);
 }
 
-/* Thick beveled "table" panel — the workhorse content container. */
-.retro-panel {
-  border: 3px solid rgb(var(--line));
-  background: rgb(var(--paper));
-  box-shadow: 4px 4px 0 rgb(var(--ink) / 0.25);
-}
-
-/* Digital odometer-style hit counter. */
 .led-counter {
   font-family: 'Courier New', Courier, monospace;
   letter-spacing: 0.15em;

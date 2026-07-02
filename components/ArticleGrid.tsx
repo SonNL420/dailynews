@@ -40,7 +40,7 @@ export function ArticleGrid({ articles, language, loading, error, emptyHint }: A
 
 function RetroLoading() {
   return (
-    <div className="retro-panel flex flex-col items-center gap-3 px-6 py-20 text-center" aria-hidden>
+    <div className="theme-panel flex flex-col items-center gap-3 px-6 py-20 text-center" aria-hidden>
       <p className="blink font-serif text-2xl font-bold text-accent">⏳ Loading headlines... please wait ⏳</p>
       <p className="text-sm text-ink-muted">(This may take a moment over a 56k connection)</p>
     </div>
@@ -49,7 +49,7 @@ function RetroLoading() {
 
 function EmptyState({ title, body }: { title: string; body: string }) {
   return (
-    <div className="retro-panel flex flex-col items-center justify-center px-6 py-20 text-center">
+    <div className="theme-panel flex flex-col items-center justify-center px-6 py-20 text-center">
       <p className="font-serif text-xl font-bold text-accent">{title}</p>
       <p className="mt-2 max-w-md text-sm text-ink-muted">{body}</p>
     </div>
@@ -60,7 +60,7 @@ function EmptyState({ title, body }: { title: string; body: string }) {
 export function SourceErrorBanner({ errors }: { errors: FeedError[] }) {
   if (errors.length === 0) return null;
   return (
-    <details className="retro-panel px-4 py-2 text-sm text-ink-muted">
+    <details className="theme-panel px-4 py-2 text-sm text-ink-muted">
       <summary className="cursor-pointer font-bold text-accent">
         ⚠️ {errors.length} source{errors.length > 1 ? 's' : ''} couldn’t be loaded
       </summary>

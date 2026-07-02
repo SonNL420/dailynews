@@ -17,7 +17,8 @@ export const viewport: Viewport = {
 };
 
 // Avoid a flash of the wrong theme before React hydrates the stored preference.
-const themeInitScript = `(function(){try{var p=JSON.parse(localStorage.getItem('dailynews:prefs:v1')||'{}');var d=p.theme?p.theme==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){}})();`;
+// Mirrors lib/themes.ts normalizeLegacyTheme() for the pre-hydration paint only.
+const themeInitScript = `(function(){try{var p=JSON.parse(localStorage.getItem('dailynews:prefs:v1')||'{}');var t=p.theme;if(t==='light')t='geocities';else if(t==='dark')t='bbs';else if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'bbs':'geocities';document.documentElement.dataset.theme=t;}catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

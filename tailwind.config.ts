@@ -1,7 +1,6 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  darkMode: 'class',
   content: [
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -27,6 +26,10 @@ const config: Config = {
         accent: {
           DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
           soft: 'rgb(var(--accent-soft) / <alpha-value>)',
+        },
+        link: {
+          DEFAULT: 'rgb(var(--link) / <alpha-value>)',
+          visited: 'rgb(var(--link-visited) / <alpha-value>)',
         },
       },
       maxWidth: {

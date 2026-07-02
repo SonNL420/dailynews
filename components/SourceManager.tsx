@@ -6,11 +6,14 @@ import { LANGUAGES, getLanguageInfo } from '@/lib/languages';
 import { CATEGORY_ORDER, categoryLabel } from '@/lib/categories';
 import { countryName, flagEmoji } from '@/lib/countries';
 import { CloseIcon, PlusIcon, TrashIcon } from './icons';
+import { TrafficLights } from './TrafficLights';
+import type { ThemeId } from '@/lib/themes';
 
 interface SourceManagerProps {
   open: boolean;
   onClose: () => void;
   language: LanguageCode;
+  theme: ThemeId;
   builtinSources: Source[];
   customSources: Source[];
   isSourceEnabled: (id: string) => boolean;
@@ -31,7 +34,7 @@ function hashString(input: string): string {
 }
 
 export function SourceManager(props: SourceManagerProps) {
-  const { open, onClose, language } = props;
+  const { open, onClose, language, theme } = props;
 
   // Close on Escape.
   useEffect(() => {
@@ -50,19 +53,24 @@ export function SourceManager(props: SourceManagerProps) {
   return (
     <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label="Manage sources">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden />
-      <div className="retro-panel relative flex h-full w-full max-w-md flex-col !border-l-4">
-        <header className="flex items-center justify-between bg-gradient-to-r from-blue-900 to-cyan-700 px-3 py-1.5 dark:from-black dark:to-green-950">
-          <div>
-            <h2 className="font-serif text-base font-bold text-white">📁 Manage Sources</h2>
-            <p className="text-xs text-cyan-100">
-              {langInfo.flag} {langInfo.nativeLabel} · {langInfo.englishLabel}
-            </p>
+      <div className="theme-panel relative flex h-full w-full max-w-md flex-col !border-l-4">
+        <header className="title-bar flex items-center justify-between px-3 py-1.5">
+          <div className="flex items-center gap-2">
+            {theme === 'aqua' && <TrafficLights />}
+            <div>
+              <h2 className="font-serif text-base font-bold text-[rgb(var(--titlebar-fg))]">
+                📁 Manage Sources
+              </h2>
+              <p className="text-xs text-[rgb(var(--titlebar-fg))] opacity-80">
+                {langInfo.flag} {langInfo.nativeLabel} · {langInfo.englishLabel}
+              </p>
+            </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="win98-btn inline-flex h-6 w-6 items-center justify-center text-xs font-bold text-black"
+            className="theme-btn inline-flex h-6 w-6 items-center justify-center text-xs font-bold"
           >
             <CloseIcon width={14} height={14} />
           </button>
@@ -126,7 +134,7 @@ function AddCustomSourceForm({
   }
 
   return (
-    <form onSubmit={submit} className="retro-panel p-4">
+    <form onSubmit={submit} className="theme-panel p-4">
       <h3 className="mb-3 font-serif text-sm font-bold text-accent">✏️ Add a custom RSS feed</h3>
       <div className="space-y-2.5">
         <input
@@ -180,7 +188,7 @@ function AddCustomSourceForm({
           </select>
         </div>
         {error && <p className="text-xs font-bold text-accent">{error}</p>}
-        <button type="submit" className="win98-btn inline-flex w-full items-center justify-center gap-1.5 px-3 py-2 text-sm font-bold">
+        <button type="submit" className="theme-btn inline-flex w-full items-center justify-center gap-1.5 px-3 py-2 text-sm font-bold">
           <PlusIcon width={16} height={16} />
           Add feed
         </button>

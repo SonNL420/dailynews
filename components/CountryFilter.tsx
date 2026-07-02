@@ -42,7 +42,7 @@ export function CountryFilter({
       <button
         type="button"
         onClick={() => onSetAll(!allOn)}
-        className="win98-btn ml-1 whitespace-nowrap px-2 py-1 text-xs font-bold"
+        className="theme-btn ml-1 whitespace-nowrap px-2 py-1 text-xs font-bold"
       >
         {allOn ? 'Deselect all' : 'Select all'}
       </button>
@@ -67,7 +67,7 @@ function Chip({
       onClick={onClick}
       aria-pressed={isActive}
       title={isActive ? `Hide ${label}` : `Show ${label}`}
-      className={['win98-btn inline-flex items-center gap-1.5 px-2 py-1 text-xs font-bold', isActive ? 'pressed' : ''].join(' ')}
+      className={['theme-btn inline-flex items-center gap-1.5 px-2 py-1 text-xs font-bold', isActive ? 'pressed' : ''].join(' ')}
     >
       {flag && (
         <span aria-hidden className={isActive ? '' : 'opacity-40 grayscale'}>

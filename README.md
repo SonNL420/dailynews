@@ -33,13 +33,24 @@ narrow by country and category.
   isolated and surfaced in a collapsible banner.
 - **Local-only preferences.** Language, enabled sources, custom feeds, filters
   and theme are stored in `localStorage`. No accounts, no database, no tracking.
-- **A design that looks like it was spawned in 1999.** Tiled GeoCities
-  starfield wallpaper, Comic Sans headlines, Windows-98-style beveled buttons,
-  a scrolling marquee, an "under construction" barricade banner, a real
-  LED-style hit counter, `:visited` link coloring on headlines, and a
-  "GeoCities ↔ BBS mode" toggle that swaps the whole palette for a
-  green-on-black terminal theme. Fully responsive, accessible, and — despite
-  appearances — a real working app underneath.
+- **Six retro UI skins**, picked from a dropdown in the header — same app,
+  same data, entirely different chrome:
+  - 🌈 **GeoCities** (1999) — tiled starfield wallpaper, Comic Sans, rainbow
+    logo, a scrolling marquee, an "under construction" banner, an LED hit
+    counter, and real `:visited` link coloring on headlines.
+  - 👾 **BBS** (1999) — black background, green monospace terminal text, CRT
+    scanlines.
+  - 🍎 **Mac OS X** (2002) — glossy Aqua gumdrop buttons, pinstripe
+    background, brushed-metal title bars with traffic-light window controls.
+  - 📱 **Nokia Symbian** (2005) — Nokia-blue chrome, a fake phone status bar
+    (signal/clock/battery), boxy S60-style buttons.
+  - 📲 **iPhone** (2008) — the glossy black nav bar and glossy blue "Web 2.0"
+    pill buttons of iPhone OS 2/3-era sites.
+  - 🤖 **Android** (2010) — dark gradient chrome with a green Eclair-era
+    accent line, flat utilitarian buttons.
+
+  Fully responsive and accessible underneath every skin — it's a real working
+  app, just dressed for a different decade.
 
 ## Tech stack
 
