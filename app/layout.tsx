@@ -11,21 +11,21 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffff00' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b1120' },
   ],
 };
 
 // Avoid a flash of the wrong theme before React hydrates the stored preference.
 // Mirrors lib/themes.ts normalizeLegacyTheme() for the pre-hydration paint only.
-const themeInitScript = `(function(){try{var p=JSON.parse(localStorage.getItem('dailynews:prefs:v1')||'{}');var t=p.theme;if(t==='light')t='geocities';else if(t==='dark')t='bbs';else if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'bbs':'geocities';document.documentElement.dataset.theme=t;}catch(e){}})();`;
+const themeInitScript = `(function(){try{var p=JSON.parse(localStorage.getItem('dailynews:prefs:v1')||'{}');var t=p.theme;if(t==='light')t='geocities';else if(t==='dark')t='bbs';else if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'midnight':'clean';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme=window.matchMedia('(prefers-color-scheme: dark)').matches?'midnight':'clean';}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Comic Sans MS / Times New Roman / Courier New are system fonts —
-            no webfont fetch needed, which is exactly how it was done in 1999. */}
+        {/* Every theme uses a system font stack, so there is no font request or
+            layout shift while the saved theme is restored. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="font-sans antialiased">{children}</body>

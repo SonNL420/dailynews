@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Theme system: <html data-theme="..."> selects one of six eras. All themes
+   Theme system: <html data-theme="..."> selects one of nine designs. All themes
    share the same components; each theme just redefines these CSS variables
    plus a handful of "chrome" classes (.theme-btn, .theme-panel, .title-bar).
    :root holds the defaults for the original "GeoCities" theme (1999).
@@ -47,6 +47,161 @@ body {
 ::selection {
   background: rgb(var(--accent));
   color: rgb(var(--paper));
+}
+
+/* ── Clean (modern light) ────────────────────────────────────────────────── */
+[data-theme='clean'] {
+  --font-serif: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --paper: 248 250 252;
+  --paper-subtle: 241 245 249;
+  --ink: 15 23 42;
+  --ink-muted: 71 85 105;
+  --ink-faint: 100 116 139;
+  --line: 203 213 225;
+  --accent: 37 99 235;
+  --accent-soft: 219 234 254;
+  --link: 29 78 216;
+  --link-visited: 109 40 217;
+  --titlebar-fg: 15 23 42;
+}
+[data-theme='clean'] body {
+  background-color: rgb(var(--paper));
+  background-image: none;
+}
+[data-theme='clean'] .theme-btn,
+[data-theme='midnight'] .theme-btn,
+[data-theme='editorial'] .theme-btn {
+  border: 1px solid rgb(var(--line));
+  border-radius: 8px;
+  background: rgb(var(--paper));
+  color: rgb(var(--ink));
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.06);
+  font-family: var(--font-sans);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease,
+    color 150ms ease;
+}
+[data-theme='clean'] .theme-btn:hover {
+  border-color: rgb(var(--accent) / 0.5);
+  background: rgb(var(--paper-subtle));
+}
+[data-theme='clean'] .theme-btn:active,
+[data-theme='clean'] .theme-btn.pressed,
+[data-theme='midnight'] .theme-btn:active,
+[data-theme='midnight'] .theme-btn.pressed,
+[data-theme='editorial'] .theme-btn:active,
+[data-theme='editorial'] .theme-btn.pressed {
+  border-color: rgb(var(--accent) / 0.7);
+  background: rgb(var(--accent-soft));
+  box-shadow: none;
+  padding-top: 0;
+}
+[data-theme='clean'] .theme-panel,
+[data-theme='midnight'] .theme-panel,
+[data-theme='editorial'] .theme-panel {
+  overflow: hidden;
+  border: 1px solid rgb(var(--line));
+  border-radius: 12px;
+  background: rgb(var(--paper));
+  box-shadow: 0 8px 24px rgb(15 23 42 / 0.07);
+}
+[data-theme='clean'] .title-bar {
+  border-bottom: 1px solid rgb(var(--line));
+  background: rgb(var(--paper) / 0.94);
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.05);
+  backdrop-filter: blur(12px);
+}
+
+/* ── Midnight (modern dark) ──────────────────────────────────────────────── */
+[data-theme='midnight'] {
+  color-scheme: dark;
+  --font-serif: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --paper: 15 23 42;
+  --paper-subtle: 30 41 59;
+  --ink: 241 245 249;
+  --ink-muted: 203 213 225;
+  --ink-faint: 148 163 184;
+  --line: 51 65 85;
+  --accent: 96 165 250;
+  --accent-soft: 30 58 95;
+  --link: 147 197 253;
+  --link-visited: 196 181 253;
+  --titlebar-fg: 248 250 252;
+}
+[data-theme='midnight'] body {
+  background-color: #0b1120;
+  background-image: radial-gradient(circle at 50% -20%, #172554 0, #0b1120 38rem);
+  background-attachment: fixed;
+}
+[data-theme='midnight'] .theme-btn {
+  background: rgb(var(--paper-subtle));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+}
+[data-theme='midnight'] .theme-btn:hover {
+  border-color: rgb(var(--accent) / 0.65);
+  background: rgb(39 52 73);
+}
+[data-theme='midnight'] .theme-panel {
+  background: rgb(var(--paper) / 0.96);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.2);
+}
+[data-theme='midnight'] .title-bar {
+  border-bottom: 1px solid rgb(var(--line));
+  background: rgb(11 17 32 / 0.92);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+  backdrop-filter: blur(12px);
+}
+
+/* ── Editorial (warm reading) ────────────────────────────────────────────── */
+[data-theme='editorial'] {
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --paper: 250 247 240;
+  --paper-subtle: 241 235 222;
+  --ink: 39 34 28;
+  --ink-muted: 91 80 67;
+  --ink-faint: 128 113 94;
+  --line: 205 194 174;
+  --accent: 153 45 45;
+  --accent-soft: 238 218 207;
+  --link: 30 73 118;
+  --link-visited: 107 70 132;
+  --titlebar-fg: 255 253 248;
+}
+[data-theme='editorial'] body {
+  background-color: rgb(var(--paper-subtle));
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.22)),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgb(94 75 54 / 0.018) 3px 4px);
+  background-attachment: fixed;
+}
+[data-theme='editorial'] .theme-btn {
+  border-radius: 4px;
+  background: rgb(var(--paper));
+  box-shadow: none;
+}
+[data-theme='editorial'] .theme-btn:hover {
+  border-color: rgb(var(--accent) / 0.55);
+  background: rgb(var(--paper-subtle));
+}
+[data-theme='editorial'] .theme-panel {
+  border-radius: 4px;
+  box-shadow: 0 4px 18px rgb(62 48 34 / 0.08);
+}
+[data-theme='editorial'] .title-bar {
+  border-bottom: 3px solid rgb(var(--accent));
+  background: rgb(48 42 35);
+}
+
+/* Keep attention cues calm in the modern themes. */
+[data-theme='clean'] .blink,
+[data-theme='midnight'] .blink,
+[data-theme='editorial'] .blink {
+  animation: none;
 }
 
 /* ── BBS (1999 terminal) ─────────────────────────────────────────────────── */

@@ -44,7 +44,7 @@ function loadPrefs(): Preferences {
     if (!raw) {
       const prefersDark =
         window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-      return { ...DEFAULT_PREFS, theme: prefersDark ? 'bbs' : 'geocities' };
+      return { ...DEFAULT_PREFS, theme: prefersDark ? 'midnight' : 'clean' };
     }
     const parsed = JSON.parse(raw) as Partial<Preferences> & { theme?: string };
     return {
